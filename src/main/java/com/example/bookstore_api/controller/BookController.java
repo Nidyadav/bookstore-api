@@ -26,18 +26,22 @@ public class BookController {
        Optional<Book> book= bookService.getBookById(book_id);
         return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @GetMapping("/search")
+    @GetMapping("/searchWithTitle")
     public List<Book> searchBookByTitle(@RequestParam  String title){
         return  bookService.searchBooksByTitle(title);
     }
-    @GetMapping("/publisher/{publisher}")
+    @GetMapping("/searchWithPublisher/{publisher}")
     public List<Book> filterBookByPublisher(@PathVariable String publisher){
         return bookService.filterBookByPublisher(publisher);
 
     }
-    @GetMapping("/author/{author}")
-    public List<Book>filterBooksByAuthor(@PathVariable String author){
+    @GetMapping("/SearchWithAuthor/{author}")
+    public List<Book> searchBooksByAuthor(@PathVariable String author){
         return  bookService.filterBooksByAuthor(author);
+    }
+    @GetMapping("/filter")
+    public List<Book> filterBooksByPublisherAndAuthor( @RequestParam String publisher,@RequestParam String author){
+        return  bookService.filterBooksByPublisherAndAuthor(publisher,author);
     }
 
 }

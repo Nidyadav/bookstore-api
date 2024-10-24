@@ -34,4 +34,8 @@ public class BookService {
     public List<Book> filterBooksByAuthor(String author){
         return  bookRepository.findByAuthor(author);
     }
+
+    public List<Book> filterBooksByPublisherAndAuthor( String publisher,String author) {
+        return bookRepository.filterBooksByPublisherAndAuthor(publisher,author);
+    }
 }
