@@ -19,9 +19,10 @@ public class BookController {
     }
 
     @GetMapping
-    public List<Book> getAllBooks(@RequestParam(defaultValue = "0") Integer pageNo,
-                                  @RequestParam(defaultValue = "10") Integer pageSize) {
-        return bookService.getAllBooks(pageNo, pageSize);
+    public ResponseEntity<List<Book>> getAllBooks(@RequestParam(defaultValue = "0") Integer pageNo,
+                                  @RequestParam(defaultValue = "5") Integer pageSize) {
+        List<Book> books= bookService.getAllBooks(pageNo, pageSize);
+        return books.isEmpty()? ResponseEntity.noContent().build():ResponseEntity.ok(books);
     }
 
     @GetMapping("/{book_id}")
