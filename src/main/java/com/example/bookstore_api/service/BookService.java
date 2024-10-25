@@ -28,11 +28,11 @@ public class BookService {
     public List<Book>searchBooksByTitle(String title){
         return  bookRepository.findByTitleIgnoreCase(title);
     }
-    public List<Book> filterBookByPublisher(String publisher){
-        return bookRepository.findByPublisher(publisher);
+    public List<Book> searchBookByAuthor(String author){
+        return bookRepository.findByAuthor(author);
     }
-    public List<Book> filterBooksByAuthor(String author){
-        return  bookRepository.findByAuthor(author);
+    public List<Book> searchBooksByIsbn(String isbn){
+        return  bookRepository.findByIsbn(isbn);
     }
 
     public List<Book> filterBooksByPublisherAndAuthor( String publisher,String author) {

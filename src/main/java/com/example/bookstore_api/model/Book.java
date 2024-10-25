@@ -34,14 +34,14 @@ public class Book {
 
     @ElementCollection
     @CollectionTable(name = "book_genres", joinColumns = @JoinColumn(name = "book_id"))
-    @Column(name = "genre", nullable = true)
+    @Column(name = "genre")
     private List<String> genres;
 
 
     @ElementCollection
     @CollectionTable(name = "book_characters",
             joinColumns = @JoinColumn(name = "book_id"))
-    @Column(name = "characters", nullable = true)
+    @Column(name = "characters")
     private List<String> characters;
 
     private String bookForm;
@@ -53,13 +53,13 @@ public class Book {
 
     @ElementCollection
     @CollectionTable(name = "book_awards", joinColumns = @JoinColumn(name = "book_id"))
-    @Column(name = "awards", nullable = true)
+    @Column(name = "awards")
     private List<String> awards;
     private String numRating;
 
     @ElementCollection
     @CollectionTable(name = "book_ratings_by_stars", joinColumns = @JoinColumn(name = "book_id"))
-    @Column(name = "ratings_by_stars",nullable = true)
+    @Column(name = "ratings_by_stars")
     private List<String> ratingsByStars;
     private String likedPercent;
 

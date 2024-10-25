@@ -11,8 +11,8 @@ import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book,String>, PagingAndSortingRepository<Book,String> {
     List<Book> findByTitleIgnoreCase(String title);
+    List<Book> findByIsbn(String isbn);
     List<Book> findByAuthor(String author);
-    List<Book> findByPublisher(String publisher);
-@Query("SELECT b FROM Book b WHERE b.publisher=:publisher AND b.author=:author")
+@Query("SELECT b FROM Book b WHERE b.publisher=:publisher OR b.author=:author")
     List<Book> filterBooksByPublisherAndAuthor(@Param("publisher") String publisher, @Param("author")String author);
 }
