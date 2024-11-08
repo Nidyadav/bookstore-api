@@ -1,11 +1,11 @@
 package com.example.bookstore_api.controller;
 
+import com.example.bookstore_api.exception.NoRelevantRecordFoundException;
 import com.example.bookstore_api.model.Book;
 import com.example.bookstore_api.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,42 +20,51 @@ public class BookController {
 
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks(@RequestParam(defaultValue = "0") Integer pageNo,
-                                  @RequestParam(defaultValue = "5") Integer pageSize) {
-        List<Book> books= bookService.getAllBooks(pageNo, pageSize);
-        return books.isEmpty()? ResponseEntity.noContent().build():ResponseEntity.ok(books);
+                                                  @RequestParam(defaultValue = "5") Integer pageSize) {
+        List<Book> books = bookService.getAllBooks(pageNo, pageSize);
+        return books.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(books);
     }
 
     @GetMapping("/{book_id}")
-    public ResponseEntity<Book> getBookByBookId(@PathVariable String book_id) {
+    public ResponseEntity<Book> getBookByBookId(@PathVariable String book_id) throws NoRelevantRecordFoundException {
+        //try{
         Optional<Book> book = bookService.getBookById(book_id);
-        return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return book.map(ResponseEntity::ok).get();
+        //return book.map(ResponseEntity::ok).orElseThrow(() -> new NoRelevantRecordFoundException("No book found with given book id."));
+//            if(!book.isEmpty()){
+//                return  new ResponseEntity<>(book.get(),HttpStatus.FOUND);
+//            }else
+//            {
+//                return  new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+//            }
+        //return  book;
+//        } catch (NoRelevantRecordFoundException e) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+//
+//        }
+        //return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Book>> searchBookByTitle(@RequestParam(required = false) String title,
-                                                        @RequestParam(required = false) String author,
-                                                        @RequestParam(required = false) String isbn) {
+    public ResponseEntity<List<Book>> searchBooks(@RequestParam(required = false) String title,
+                                                  @RequestParam(required = false) String author,
+                                                  @RequestParam(required = false) String publisher) throws NoRelevantRecordFoundException {
         List<Book> books;
-        if (title != null) {
-            books=bookService.searchBooksByTitle(title);
-        } else if (author!=null) {
-            books=bookService.searchBookByAuthor(author);
-        } else if (isbn!=null) {
-            books= bookService.searchBooksByIsbn(isbn);
-        }else{
-            return  ResponseEntity.badRequest().build();
-        }
-       return books.isEmpty()? ResponseEntity.noContent().build():ResponseEntity.ok(books);
+        books = bookService.searchBooks(title, author, publisher);
+        return ResponseEntity.ok(books);
+        //return books.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(books);
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<Book>> filterBooksByPublisherAndAuthor(@RequestParam(required = false) String publisher,
-                                                                      @RequestParam(required = false) String author) {
-        if (publisher == null && author == null) {
-            return ResponseEntity.badRequest().body(Collections.emptyList());
-        }
-        List<Book> books = bookService.filterBooksByPublisherAndAuthor(publisher, author);
-        return books.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(books);
+    public ResponseEntity<List<Book>> filterBooks(@RequestParam(required = false) String title,
+                                                  @RequestParam(required = false) String author,
+                                                  @RequestParam(required = false) String publisher) throws NoRelevantRecordFoundException {
+        List<Book> books;
+        books = bookService.filterBooks(title, author, publisher);
+        return ResponseEntity.ok(books);
+
     }
+
 
 }

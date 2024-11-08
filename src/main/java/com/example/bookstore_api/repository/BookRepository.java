@@ -9,10 +9,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 
-public interface BookRepository extends JpaRepository<Book,String>, PagingAndSortingRepository<Book,String> {
-    List<Book> findByTitleIgnoreCase(String title);
-    List<Book> findByIsbn(String isbn);
-    List<Book> findByAuthor(String author);
-@Query("SELECT b FROM Book b WHERE b.publisher=:publisher OR b.author=:author")
-    List<Book> filterBooksByPublisherAndAuthor(@Param("publisher") String publisher, @Param("author")String author);
+public interface BookRepository extends JpaRepository<Book, String>, PagingAndSortingRepository<Book, String> {
+
+
+    @Query("SELECT bb FROM Book bb WHERE bb.title = :title AND bb.author = :author AND bb.publisher = :publisher")
+    List<Book> searchBooks(@Param("title") String title, @Param("author") String author, @Param("publisher") String publisher);
+    @Query("SELECT bb FROM Book bb WHERE bb.title = :title OR bb.author = :author OR bb.publisher = :publisher")
+    List<Book> filterBooks(@Param("title") String title, @Param("author") String author, @Param("publisher") String publisher);
 }
+
