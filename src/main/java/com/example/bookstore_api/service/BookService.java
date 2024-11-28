@@ -50,4 +50,8 @@ public class BookService {
     }
 
 
+    public Book createBook(Book book) {
+        book.setBookId(book.getBookId());
+       return  bookRepository.save(book);
+    }
 }

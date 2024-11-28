@@ -1,10 +1,16 @@
 package com.example.bookstore_api.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.NumberFormat;
 
 
 import java.time.LocalDate;
@@ -16,12 +22,14 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "books")
-
+@JacksonXmlRootElement(localName = "book")
+@Valid
 public class Book {
     @Id
-    private String bookId;
+    @Column(name = "book_id", nullable = false)
+    private String bookId;    //bookId is not auto generated, it has to be manually set
     private String quantity;
-
+    @NotNull(message = "title can not be null.")
     private String title;
     private String series;
     private String author;
@@ -30,6 +38,7 @@ public class Book {
     @Column(columnDefinition = "TEXT")
     private String description;
     private String language;
+    @Size(min=10, max=20 ,message = "isbn should be between 10 to 20 digits")
     private String isbn;
 
     @ElementCollection
@@ -67,6 +76,7 @@ public class Book {
     private String coverImg;
     private String bbeScore;
     private String bbeVotes;
+    @NotEmpty(message = "Price is required")
     private String price;
 
 
